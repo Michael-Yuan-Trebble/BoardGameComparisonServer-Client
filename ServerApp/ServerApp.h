@@ -1,0 +1,46 @@
+#pragma once
+
+#define NOMINMAX
+#define IPADDRESS "127.0.0.1"
+#define PORT 54000
+#include <QtWidgets/QMainWindow>
+#include <qthread.h>
+#include <WinSock2.h>
+#include <QHBoxLayout>
+#include <qlabel.h>
+#include <WS2tcpip.h>
+#include <qtimer.h>
+#include <qmessagebox.h>
+#include "ui_ServerApp.h"
+#include "ServerWorker.h"
+
+class ServerApp : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    ServerApp(QWidget *parent = nullptr);
+    ~ServerApp();
+
+    SOCKET serverSocket;
+
+    QHBoxLayout* MainLayout;
+    QLabel* label;
+
+private slots:
+    void addClient(const QString& IP, quint16 port);
+
+private:
+    Ui::ServerAppClass ui;
+
+    int setupSocket();
+
+    void closeAll(SOCKET inSocket);
+
+    QThread* serverThread;
+    ServerWorker* worker;
+
+protected:
+    void closeEvent(QCloseEvent* event) override;
+};
+

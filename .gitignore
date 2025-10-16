@@ -30,3 +30,47 @@
 *.exe
 *.out
 *.app
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+*~
+
+# Qt Creator
+*.pro.user
+*.user
+*.qbs.user
+
+# Qt Generated
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+
+# MSVC
+*.vcxproj.user
+*.vcxproj.filters
+*.vcxproj
+*.sdf
+*.opensdf
+*.ipch
+*.VC.db
+*.sln
+
+
+# Misc
+*.vsidx
+*.suo
+*.db-shm
+*.db-wal
+*.opendb
+*.json
+*.bin
+
+# Ignore folders
+x64/
+debug/
+release/
+build-*/

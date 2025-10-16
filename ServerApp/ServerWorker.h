@@ -1,0 +1,29 @@
+#pragma once
+
+#include <qthread.h>
+#include <qdebug.h>
+#include <WinSock2.h>
+#include <WS2tcpip.h>
+
+class ServerWorker : public QObject {
+	Q_OBJECT
+
+public:
+
+	explicit ServerWorker(QObject* parent = nullptr) : QObject(parent), m_running(true), m_listenSocket(INVALID_SOCKET) {}
+
+	SOCKET listenSocket() const {
+		return m_listenSocket;
+	}
+
+public slots:
+	void startServer();
+
+	void stop() { m_running = false; }
+signals:
+	void clientConnected(const QString &IP, quint16 port);
+
+private:
+	std::atomic<bool> m_running;
+	SOCKET m_listenSocket;
+};
