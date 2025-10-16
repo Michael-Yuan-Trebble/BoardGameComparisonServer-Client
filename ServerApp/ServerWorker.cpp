@@ -7,21 +7,24 @@ void ServerWorker::startServer()
     SOCKET listenSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     sockaddr_in service{};
     service.sin_family = AF_INET;
-    service.sin_addr.s_addr = INADDR_ANY;
-    service.sin_port = htons(54000);
+    InetPtonA(AF_INET, IPADDRESS, &service.sin_addr.s_addr);
+    service.sin_port = htons(PORT);
 
-    if (bind(listenSocket, (SOCKADDR*)&service, sizeof(service)) == SOCKET_ERROR) {
+    if (bind(listenSocket, (SOCKADDR*)&service, sizeof(service)) == SOCKET_ERROR) 
+    {
         qDebug() << "bind failed:" << WSAGetLastError();
         return;
     }
 
-    if (listen(listenSocket, SOMAXCONN) == SOCKET_ERROR) {
+    if (listen(listenSocket, SOMAXCONN) == SOCKET_ERROR) 
+    {
         qDebug() << "listen failed:" << WSAGetLastError();
         return;
     }
 
-    while (m_running) {
-        fd_set readSet;
+    while (m_running)
+    {
+        fd_set readSet{};
         FD_ZERO(&readSet);
         FD_SET(listenSocket, &readSet);
 
@@ -30,11 +33,13 @@ void ServerWorker::startServer()
         timeout.tv_usec = 100000;
 
         int sel = select(0, &readSet, nullptr, nullptr, &timeout);
-        if (sel > 0 && FD_ISSET(listenSocket, &readSet)) {
+        if (sel > 0 && FD_ISSET(listenSocket, &readSet))
+        {
             sockaddr_in clientAddr{};
             int addrSize = sizeof(clientAddr);
             SOCKET clientSocket = accept(listenSocket, (SOCKADDR*)&clientAddr, &addrSize);
-            if (clientSocket != INVALID_SOCKET) {
+            if (clientSocket != INVALID_SOCKET) 
+            {
                 char ipStr[INET_ADDRSTRLEN];
                 InetNtopA(AF_INET, &clientAddr.sin_addr, ipStr, sizeof(ipStr));
                 quint16 port = ntohs(clientAddr.sin_port);

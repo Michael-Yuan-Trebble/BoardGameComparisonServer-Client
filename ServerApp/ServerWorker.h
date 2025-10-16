@@ -1,5 +1,7 @@
 #pragma once
 
+#define IPADDRESS "127.0.0.1"
+#define PORT 54000
 #include <qthread.h>
 #include <qdebug.h>
 #include <WinSock2.h>

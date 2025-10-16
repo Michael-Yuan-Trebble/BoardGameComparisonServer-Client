@@ -4,21 +4,21 @@
 #define PORT 54000
 #include <iostream>
 #include <WinSock2.h>
-#include <WS2tcpip.h>
 #include <QtWidgets/QMainWindow>
 #include <QHBoxLayout>
+#include <qobject.h>
 #include <QVBoxLayout>
 #include <qpushbutton.h>
 #include <qlabel.h>
-#include <qpushbutton.h>
 #include "ui_ClientApp.h"
+#include "NetworkManager.h"
 
 class ClientApp : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    ClientApp(QWidget *parent = nullptr);
+    explicit ClientApp(NetworkManager* inNet, QWidget *parent = nullptr);
     ~ClientApp();
 
     SOCKET clientSocket;
@@ -26,12 +26,15 @@ public:
     QHBoxLayout* Layout;
     QVBoxLayout* MainLayout;
     QLabel* PortDisplay;
+    QPushButton* connectBtn;
+    QLabel* ConnectedLabel;
+
+signals:
+    void connectedServer();
 
 private:
 
-    int createClientSocket();
-
-    void closeAll(SOCKET inSocket);
+    NetworkManager* network;
 
     void connectSocket();
 };

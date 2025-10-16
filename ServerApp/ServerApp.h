@@ -1,8 +1,5 @@
 #pragma once
 
-#define NOMINMAX
-#define IPADDRESS "127.0.0.1"
-#define PORT 54000
 #include <QtWidgets/QMainWindow>
 #include <qthread.h>
 #include <WinSock2.h>
