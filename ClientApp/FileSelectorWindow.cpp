@@ -13,7 +13,9 @@ FileSelectorWindow::FileSelectorWindow(NetworkManager* inNet, FileManager* inFil
 	MainLayout = new QVBoxLayout(CentralWidget);
 
 	loadFilebtn = new QPushButton(CentralWidget);
+	loadFilebtn->setText("Load File");
 	createFilebtn = new QPushButton(CentralWidget);
+	createFilebtn->setText("Create File");
 
 	QHBoxLayout* layout1 = new QHBoxLayout(CentralWidget);
 
@@ -22,6 +24,7 @@ FileSelectorWindow::FileSelectorWindow(NetworkManager* inNet, FileManager* inFil
 
 	MainLayout->addLayout(layout1);
 	
+	resize(800, 800);
 }
 
 FileSelectorWindow::~FileSelectorWindow() 

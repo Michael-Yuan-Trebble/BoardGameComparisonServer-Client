@@ -1,0 +1,21 @@
+    QWidget 
+    { 
+        font-family: 'Segoe UI';
+        font-size: 14px;
+    }
+    QPushButton
+    {
+        background-color: #0078D7;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 12px;
+    }
+    QPushButton:hover
+    {
+        background-color: #1089ff;
+    }
+    QPushButton:pressed
+    {
+        background-color: #005A9E;
+    }

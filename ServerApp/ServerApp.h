@@ -28,7 +28,6 @@ private slots:
     void addClient(const QString& IP, quint16 port);
 
 private:
-    Ui::ServerAppClass ui;
 
     int setupSocket();
 

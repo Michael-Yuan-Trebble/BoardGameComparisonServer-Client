@@ -7,6 +7,13 @@ int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
 
+    QFile styleFile(":/StyleSheet.qss");
+    if (styleFile.open(QFile::ReadOnly)) 
+    {
+        QString style = QLatin1String(styleFile.readAll());
+        app.setStyleSheet(style);
+    }
+
     NetworkManager* network = new NetworkManager();
     FileManager* fileManager = new FileManager();
     if (network && fileManager && network->init()) {

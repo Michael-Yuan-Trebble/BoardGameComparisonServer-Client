@@ -2,6 +2,9 @@
 
 #define IPADDRESS "127.0.0.1"
 #define PORT 54000
+#define PORTMAX 66535
+#define PORTMIN 1
+
 #include <iostream>
 #include <WinSock2.h>
 #include <QtWidgets/QMainWindow>
@@ -10,6 +13,8 @@
 #include <QVBoxLayout>
 #include <qpushbutton.h>
 #include <qlabel.h>
+#include <qlineedit.h>
+#include <qvalidator.h>
 #include "ui_ClientApp.h"
 #include "NetworkManager.h"
 
@@ -22,12 +27,20 @@ public:
     ~ClientApp();
 
     SOCKET clientSocket;
+    
+    QString IPAddress;
+    int Port = -1;
 
-    QHBoxLayout* Layout;
+    QVBoxLayout* Box;
     QVBoxLayout* MainLayout;
-    QLabel* PortDisplay;
+    QHBoxLayout* IPLayout;
+    QHBoxLayout* PortLayout;
+
+    QLineEdit* IPAddressEdit;
+    QLineEdit* PortEdit;
+
+    QLabel* ConnectionDisplayLabel;
     QPushButton* connectBtn;
-    QLabel* ConnectedLabel;
 
 signals:
     void connectedServer();

@@ -3,7 +3,6 @@
 ServerApp::ServerApp(QWidget *parent)
     : QMainWindow(parent)
 {
-    ui.setupUi(this);
 
     QWidget* centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
@@ -26,6 +25,8 @@ ServerApp::ServerApp(QWidget *parent)
     connect(worker, &ServerWorker::clientConnected, this, &ServerApp::addClient);
 
     serverThread->start();
+
+    resize(800, 800);
 }
 
 void ServerApp::closeEvent(QCloseEvent* event) 

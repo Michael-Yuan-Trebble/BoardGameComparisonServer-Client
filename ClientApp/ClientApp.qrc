@@ -1,4 +1,5 @@
 <RCC>
-    <qresource prefix="ClientApp">
+    <qresource prefix="/">
+        <file>StyleSheet.qss</file>
     </qresource>
 </RCC>

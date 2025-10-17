@@ -29,8 +29,10 @@ void Navigator::onAdvance()
 	}
 	selectorWindow = new FileSelectorWindow(network, fileManager);
 	connect(selectorWindow, &FileSelectorWindow::fileSelected, this, &Navigator::onFileSelected);
+	selectorWindow->show();
 }
 
-void Navigator::onFileSelected() {
+void Navigator::onFileSelected() 
+{
 
 }
