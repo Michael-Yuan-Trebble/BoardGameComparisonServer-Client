@@ -19,3 +19,10 @@
     {
         background-color: #005A9E;
     }
+    QLineEdit{
+        border: 1px solid #2e2e2e;
+        border-bottom: 1px solid #2e2e2e;
+        background-color: dark gray;
+        border-radius: 4px;
+        color: white;
+    }

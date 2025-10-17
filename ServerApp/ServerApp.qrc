@@ -1,4 +1,5 @@
 <RCC>
-    <qresource prefix="ServerApp">
+    <qresource prefix="/">
+        <file>ServerIcon.ico</file>
     </qresource>
 </RCC>

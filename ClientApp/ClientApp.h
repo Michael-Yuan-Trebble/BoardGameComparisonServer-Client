@@ -15,6 +15,7 @@
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qvalidator.h>
+#include <qmessagebox.h>
 #include "ui_ClientApp.h"
 #include "NetworkManager.h"
 

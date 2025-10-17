@@ -3,7 +3,7 @@
 ClientApp::ClientApp(NetworkManager* inNet, QWidget* parent)
     : QMainWindow(parent)
 {
-
+    setWindowTitle("Connect To Server");
     network = inNet;
 
     QWidget* centralWidget = new QWidget(this);
@@ -47,6 +47,7 @@ ClientApp::ClientApp(NetworkManager* inNet, QWidget* parent)
     Box->addLayout(PortLayout, 0);
     Box->addSpacing(200);
 
+    MainLayout->setContentsMargins(50, 50, 50, 50);
 
     MainLayout->addLayout(Box);
     resize(800, 800);
@@ -73,6 +74,17 @@ void ClientApp::connectSocket()
     if (network->connectToServer(IPADDRESS, PORT))
     {
         emit connectedServer();
+    }
+    else 
+    {
+        // TODO: change this from just a warning message box to some update next to the input telling the user which one is incorrect
+
+        QMessageBox::warning(
+            this,
+            "Warning",
+            "IP Address or Port not detected",
+            QMessageBox::Ok
+        );
     }
 
 }

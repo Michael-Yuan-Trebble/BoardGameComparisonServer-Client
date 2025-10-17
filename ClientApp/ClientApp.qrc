@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>StyleSheet.qss</file>
+        <file>ClientIcon.ico</file>
     </qresource>
 </RCC>

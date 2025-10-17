@@ -1,11 +1,15 @@
 #pragma once
 
+#define IPADDRESS "127.0.0.1"
 #include <QtWidgets/QMainWindow>
 #include <qthread.h>
 #include <WinSock2.h>
 #include <QHBoxLayout>
 #include <qlabel.h>
 #include <WS2tcpip.h>
+#include <qtablewidget.h>
+#include <qmessagebox.h>
+#include <qheaderview.h>
 #include <qtimer.h>
 #include <qmessagebox.h>
 #include "ui_ServerApp.h"
@@ -19,21 +23,21 @@ public:
     ServerApp(QWidget *parent = nullptr);
     ~ServerApp();
 
-    SOCKET serverSocket;
-
-    QHBoxLayout* MainLayout;
-    QLabel* label;
-
 private slots:
     void addClient(const QString& IP, quint16 port);
+    void removeClient(const QString& IP, quint16 port);
 
 private:
-
-    int setupSocket();
-
+    bool setupSocket();
     void closeAll(SOCKET inSocket);
 
+    SOCKET serverSocket;
+
+    QVBoxLayout* MainLayout;
+    QLabel* ServerLabel;
+    QTableWidget* Table;
     QThread* serverThread;
+
     ServerWorker* worker;
 
 protected:

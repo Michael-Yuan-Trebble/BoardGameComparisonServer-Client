@@ -8,14 +8,21 @@ ServerApp::ServerApp(QWidget *parent)
     setCentralWidget(centralWidget);
 
 
-    MainLayout = new QHBoxLayout(centralWidget);
-    label = new QLabel("Server", centralWidget);
-    MainLayout->addWidget(label);
+    MainLayout = new QVBoxLayout(centralWidget);
+    ServerLabel = new QLabel("Server IP: " + QString(IPADDRESS), centralWidget);
+    MainLayout->addWidget(ServerLabel);
 
-    if (setupSocket() != 0) 
-    {
-        qDebug() << "ERROR";
-    }
+    Table = new QTableWidget(centralWidget);
+    Table->setColumnCount(2);
+    Table->setHorizontalHeaderLabels({ "Client IP", "Port" });
+    Table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    Table->verticalHeader()->setVisible(false);
+    Table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    Table->setSelectionMode(QAbstractItemView::NoSelection);
+
+    MainLayout->addWidget(Table);
+
+    if (!setupSocket()) return;
 
     serverThread = new QThread(this);
     worker = new ServerWorker();
@@ -23,6 +30,7 @@ ServerApp::ServerApp(QWidget *parent)
 
     connect(serverThread, &QThread::started, worker, &ServerWorker::startServer);
     connect(worker, &ServerWorker::clientConnected, this, &ServerApp::addClient);
+    connect(worker, &ServerWorker::clientDisconnected, this, &ServerApp::removeClient);
 
     serverThread->start();
 
@@ -52,7 +60,7 @@ ServerApp::~ServerApp()
     }
 }
 
-int ServerApp::setupSocket()
+bool ServerApp::setupSocket()
 {
     WSADATA wsaData;
     int wsaerr;
@@ -61,16 +69,38 @@ int ServerApp::setupSocket()
     wsaerr = WSAStartup(wVersionRequested, &wsaData);
     if (wsaerr != 0)
     { 
-        qDebug() << "Server WSA start up failed"; 
-        return -1; 
+        QMessageBox::warning(
+            this,
+            "Warning",
+            "Warning, WSA Startup failed",
+            QMessageBox::Ok
+        );
+        return false;
     }
-
-    return 0;
+    return true;
 }
 
 void ServerApp::addClient(const QString& IP, quint16 port) 
 {
-    label->setText(QString::number(port));
+    int row = Table->rowCount();
+    Table->insertRow(row);
+    Table->setItem(row, 0, new QTableWidgetItem(IP));
+    Table->setItem(row, 1, new QTableWidgetItem(QString::number(port)));
+}
+
+void ServerApp::removeClient(const QString& IP, quint16 port) 
+{
+    for (int row = 0; row < Table->rowCount(); ++row)
+    {
+        QString tableIP = Table->item(row, 0)->text();
+        QString tablePort = Table->item(row, 1)->text();
+
+        if (tableIP == IP && tablePort == QString::number(port))
+        {
+            Table->removeRow(row);
+            break;
+        }
+    }
 }
 
 void ServerApp::closeAll(SOCKET inSocket) 

@@ -3,6 +3,8 @@
 FileSelectorWindow::FileSelectorWindow(NetworkManager* inNet, FileManager* inFile, QWidget* parent)
 	: QMainWindow(parent)
 {
+	setWindowTitle("Select File");
+
 	network = inNet;
 	fileManager = inFile;
 
@@ -42,13 +44,11 @@ void FileSelectorWindow::createFile()
 	);
 
 	if (filePath.isEmpty()) return;
-	
 
 	if (!filePath.endsWith(".json", Qt::CaseInsensitive)) filePath += ".json";
 
 	QFile file(filePath);
 	if (!file.exists()) return;
-	
 }
 
 void FileSelectorWindow::loadFile()
