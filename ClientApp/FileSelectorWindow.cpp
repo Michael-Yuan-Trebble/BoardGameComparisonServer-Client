@@ -19,6 +19,9 @@ FileSelectorWindow::FileSelectorWindow(NetworkManager* inNet, FileManager* inFil
 	createFilebtn = new QPushButton(CentralWidget);
 	createFilebtn->setText("Create File");
 
+	connect(loadFilebtn, &QPushButton::clicked, this, &FileSelectorWindow::loadFile);
+	connect(createFilebtn, &QPushButton::clicked, this, &FileSelectorWindow::createFile);
+
 	QHBoxLayout* layout1 = new QHBoxLayout(CentralWidget);
 
 	layout1->addWidget(loadFilebtn);
@@ -34,7 +37,7 @@ FileSelectorWindow::~FileSelectorWindow()
 
 }
 
-void FileSelectorWindow::createFile() 
+void FileSelectorWindow::createFile()
 {
 	QString filePath = QFileDialog::getSaveFileName(
 		this,
@@ -48,7 +51,18 @@ void FileSelectorWindow::createFile()
 	if (!filePath.endsWith(".json", Qt::CaseInsensitive)) filePath += ".json";
 
 	QFile file(filePath);
-	if (!file.exists()) return;
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) 
+	{
+		QMessageBox::warning(
+			this,
+			"Warning",
+			"Failed to create or open file",
+			QMessageBox::Ok
+		);
+		return;
+	}
+
+	emit fileSelected(filePath);
 }
 
 void FileSelectorWindow::loadFile()
@@ -64,4 +78,6 @@ void FileSelectorWindow::loadFile()
 
 	QFile file(fileName);
 	if (!file.exists()) return;
+
+	emit fileSelected(fileName);
 }

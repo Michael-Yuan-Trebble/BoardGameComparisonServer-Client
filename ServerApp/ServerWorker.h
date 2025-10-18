@@ -15,6 +15,7 @@ class ServerWorker : public QObject
 public:
 
 	explicit ServerWorker(QObject* parent = nullptr) : QObject(parent), m_running(true), m_listenSocket(INVALID_SOCKET) {}
+	~ServerWorker();
 
 	SOCKET listenSocket() const {
 		return m_listenSocket;
@@ -28,6 +29,8 @@ signals:
 	void clientConnected(const QString &IP, quint16 port);
 
 	void clientDisconnected(const QString& IP, quint16 port);
+
+	void dataRecieved(QByteArray data, SOCKET client);
 
 private:
 	std::atomic<bool> m_running;

@@ -65,7 +65,9 @@ void NetworkManager::recieveLoop()
         int bytes = recv(clientSocket, buffer, sizeof(buffer), 0);
         if (bytes > 0)
         {
-            emit messageRecieved(QByteArray(buffer, bytes));
+            QJsonDocument doc = QJsonDocument::fromJson(QByteArray(buffer, bytes));
+            QJsonObject reply = doc.object();
+            emit messageRecieved(reply);
         }
         else if (bytes == 0)
         {
@@ -85,7 +87,6 @@ bool NetworkManager::sendData(const char* data, int size)
 {
     if (send(clientSocket, data, size, 0) == SOCKET_ERROR)
     {
-        emit errorOccured(QString("send() failed: %1").arg(WSAGetLastError()));
         return false;
     }
     return true;

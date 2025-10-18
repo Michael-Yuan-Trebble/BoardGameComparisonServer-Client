@@ -30,6 +30,7 @@ ServerApp::ServerApp(QWidget *parent)
 
     connect(serverThread, &QThread::started, worker, &ServerWorker::startServer);
     connect(worker, &ServerWorker::clientConnected, this, &ServerApp::addClient);
+    connect(worker, &ServerWorker::dataRecieved, this, &ServerApp::handleInput);
     connect(worker, &ServerWorker::clientDisconnected, this, &ServerApp::removeClient);
 
     serverThread->start();
@@ -52,13 +53,7 @@ void ServerApp::closeEvent(QCloseEvent* event)
     QMainWindow::closeEvent(event);
 }
 
-ServerApp::~ServerApp()
-{
-    if (serverSocket != INVALID_SOCKET)
-    {
-        closeAll(serverSocket);
-    }
-}
+ServerApp::~ServerApp() {}
 
 bool ServerApp::setupSocket()
 {
@@ -101,6 +96,29 @@ void ServerApp::removeClient(const QString& IP, quint16 port)
             break;
         }
     }
+}
+
+void ServerApp::handleInput(QByteArray inData, SOCKET inSock)
+{
+    QString message = QString::fromUtf8(inData);
+    if (message.startsWith("ROLL")) 
+    {
+        QStringList parts = message.split(' ');
+        int sides = parts[1].toInt();
+        int value = parts[2].toInt();
+        rollDice(sides, value, inSock);
+        
+    }
+}
+
+void ServerApp::rollDice(int sides, int value, SOCKET inSock)
+{
+    int randomNum = QRandomGenerator::global()->bounded(1, sides + 1);
+    QJsonObject reply{};
+    reply["result"] = randomNum >= value;
+    reply["serverResult"] = value;
+    QByteArray sendClient = QJsonDocument(reply).toJson(QJsonDocument::Compact);
+    send(inSock, sendClient.constData(), sendClient.size(), 0);
 }
 
 void ServerApp::closeAll(SOCKET inSocket) 

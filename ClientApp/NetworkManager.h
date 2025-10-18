@@ -3,7 +3,9 @@
 #include <WinSock2.h>
 #include <WS2tcpip.h>
 #include <QObject>
+#include <qjsondocument.h>
 #include <QDebug>
+#include <qjsonobject.h>
 #include <thread>
 
 class NetworkManager : public QObject {
@@ -18,18 +20,19 @@ public:
 	bool sendData(const char* data, int size);
 	void closeConnection();
 
+	bool running = false;
+
 	SOCKET socket() const { return clientSocket; }
 
 signals:
 	void connected();
 	void disconnected();
-	void messageRecieved(QByteArray data);
+	void messageRecieved(QJsonObject reply);
 	void errorOccured(QString message);
 
 private:
 	SOCKET clientSocket = INVALID_SOCKET;
 	bool connectedFlag = false;
-	bool running = false;
 
 	void recieveLoop();
 };

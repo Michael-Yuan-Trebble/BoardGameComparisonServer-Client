@@ -7,6 +7,7 @@ class ClientApp;
 class NetworkManager;
 class FileSelectorWindow;
 class FileManager;
+class HomeScreen;
 
 class Navigator : public QObject
 {
@@ -19,16 +20,17 @@ public:
 public slots:
 
 	void onAdvance();
-	void onFileSelected();
+	void onFileSelected(QString fileName);
 
 private:
 
+	// Screens
 	ClientApp* clientWindow;
-
 	FileSelectorWindow* selectorWindow;
+	HomeScreen* homeScreen;
 
+	// Objects
 	NetworkManager* network;
-
 	FileManager* fileManager;
 
 };

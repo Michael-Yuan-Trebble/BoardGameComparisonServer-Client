@@ -1,6 +1,10 @@
 #include "ServerWorker.h"
 #include <qmessagebox.h>
 
+ServerWorker::~ServerWorker() 
+{
+    m_running = false;
+}
 
 void ServerWorker::startServer() 
 {
@@ -89,7 +93,9 @@ void ServerWorker::startServer()
                 }
                 else
                 {
-                    
+                    buffer[bytesReceived] = '\0';
+                    QByteArray data(buffer, bytesReceived);
+                    emit dataRecieved(data, clientSocket);
                 }
             }
             ++it;

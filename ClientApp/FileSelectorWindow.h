@@ -9,6 +9,7 @@
 #include <qtextstream.h>
 #include <qjsonobject.h>
 #include <qbytearray.h>
+#include <qmessagebox.h>
 #include <qjsondocument.h>
 #include "NetworkManager.h"
 #include "FileManager.h"
@@ -21,7 +22,7 @@ public:
 	~FileSelectorWindow();
 
 signals:
-	void fileSelected();
+	void fileSelected(QString fileName);
 
 private:
 

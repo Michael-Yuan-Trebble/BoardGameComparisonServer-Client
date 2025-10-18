@@ -1,12 +1,15 @@
 #include "Navigator.h"
 #include "ClientApp.h"
+#include "HomeScreen.h"
 #include "FileSelectorWindow.h"
 
 Navigator::Navigator(QObject* parent) : QObject(parent) {}
 
-Navigator::~Navigator() {
+Navigator::~Navigator()
+{
 	clientWindow->deleteLater();
 	selectorWindow->deleteLater();
+	homeScreen->deleteLater();
 	network->deleteLater();
 	fileManager->deleteLater();
 }
@@ -32,7 +35,13 @@ void Navigator::onAdvance()
 	selectorWindow->show();
 }
 
-void Navigator::onFileSelected() 
+void Navigator::onFileSelected(QString fileName) 
 {
+	if (selectorWindow) 
+	{
+		selectorWindow->hide();
+	}
+	homeScreen = new HomeScreen(network, fileManager, fileName);
 
+	homeScreen->show();
 }

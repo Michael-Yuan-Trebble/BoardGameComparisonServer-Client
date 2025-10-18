@@ -12,7 +12,7 @@ The client application can connect to a server through inputting the IP and port
 
 ### Server Application
 
-The server application immediately opens up a port and starts scanning for incoming clients, then dynamically updates a qtable to show what clients are currently connected and what port they are using. The server scans through a qobject on a different thread through a worker and emits signals telling the main application about updates.
+The server application immediately opens up a port and starts scanning for incoming clients, then dynamically updates a qtable to show what clients are currently connected and what port they are using. The server scans through a qobject on a different thread through a worker and emits signals telling the main application about updates. When the user rolls a dice, it reaches the server, which then does its own roll and returns true or false based on if it was higher or not.
 
 ### Testing Application
 
