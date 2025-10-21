@@ -3,7 +3,7 @@
 FileSelectorWindow::FileSelectorWindow(NetworkManager* inNet, FileManager* inFile, QWidget* parent)
 	: QMainWindow(parent)
 {
-	setWindowTitle("Select File");
+	setWindowTitle("File Selection");
 
 	network = inNet;
 	fileManager = inFile;
@@ -57,6 +57,20 @@ void FileSelectorWindow::createFile()
 			this,
 			"Warning",
 			"Failed to create or open file",
+			QMessageBox::Ok
+		);
+		return;
+	}
+
+	QJsonObject result = fileManager->loadFile(filePath);
+	result["list"] = {};
+
+	if (!fileManager->saveJson(filePath, result)) 
+	{
+		QMessageBox::warning(
+			this,
+			"Warning",
+			"Failed to save file",
 			QMessageBox::Ok
 		);
 		return;

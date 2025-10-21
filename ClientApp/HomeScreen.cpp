@@ -1,9 +1,14 @@
 #include "HomeScreen.h"
 #include "NetworkManager.h"
+#include "FileManager.h"
 
 HomeScreen::HomeScreen(NetworkManager* inNet, FileManager* inFile, QString filePath, QWidget* parent) : QMainWindow(parent) 
 {
+	setWindowTitle("Home");
 	networkManager = inNet;
+	fileManager = inFile;
+
+	readJson(filePath);
 
 	QWidget* centralWidget = new QWidget(this);
 
@@ -12,6 +17,7 @@ HomeScreen::HomeScreen(NetworkManager* inNet, FileManager* inFile, QString fileP
 	row1 = new QHBoxLayout(centralWidget);
 	row2 = new QHBoxLayout(centralWidget);
 	row3 = new QHBoxLayout(centralWidget);
+	row4 = new QHBoxLayout(centralWidget);
 
 	// Connect the network manager's disconnect function to change this
 	isConnected = inNet->running;
@@ -34,15 +40,37 @@ HomeScreen::HomeScreen(NetworkManager* inNet, FileManager* inFile, QString fileP
 	sendToServer = new QCheckBox("Send to Server", this);
 	sendToServer->setChecked(true);
 
+	diceAdd = new QComboBox(centralWidget);
+	QJsonArray rollAdds = file["list"].toArray();
+
+	for (const QJsonValue& val : rollAdds) 
+	{
+		QJsonObject roll = val.toObject();
+		QString name = val["name"].toString();
+		diceAdd->addItem(name);
+	}
+	diceAdd->addItem("None");
+	
+
 	row2->addWidget(diceType);
+	row2->addWidget(diceAdd);
 	row2->addWidget(rollDicebtn);
 
 	diceLabel = new QLabel("Not Rolled", centralWidget);
 	row3->addWidget(diceLabel);
 
+	settingsbtn = new QPushButton("Settings", centralWidget);
+
+	connect(settingsbtn, &QPushButton::clicked, this, [this, filePath] {
+		emit goToSettings(filePath);
+		});
+
+	row4->addWidget(settingsbtn);
+
 	centralLayout->addLayout(row1);
 	centralLayout->addLayout(row2);
 	centralLayout->addLayout(row3);
+	centralLayout->addLayout(row4);
 
 	setCentralWidget(centralWidget);
 
@@ -52,6 +80,11 @@ HomeScreen::HomeScreen(NetworkManager* inNet, FileManager* inFile, QString fileP
 }
 
 HomeScreen::~HomeScreen() {}
+
+void HomeScreen::readJson(const QString& filePath) 
+{
+	file = fileManager->loadFile(filePath);
+}
 
 void HomeScreen::rollDice() 
 {

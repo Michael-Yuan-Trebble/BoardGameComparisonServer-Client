@@ -95,7 +95,7 @@ bool NetworkManager::sendData(const char* data, int size)
 void NetworkManager::closeConnection() 
 {
     running = false;
-    if (clientSocket==INVALID_SOCKET)
+    if (clientSocket != INVALID_SOCKET)
     {
         closesocket(clientSocket);
         clientSocket = INVALID_SOCKET;
