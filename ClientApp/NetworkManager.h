@@ -28,7 +28,7 @@ signals:
 	void connected();
 	void disconnected();
 	void messageRecieved(QJsonObject reply);
-	void errorOccured(QString message);
+	void errorOccured(const QString& message);
 
 private:
 	SOCKET clientSocket = INVALID_SOCKET;

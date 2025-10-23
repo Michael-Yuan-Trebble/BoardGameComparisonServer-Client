@@ -61,7 +61,8 @@ HomeScreen::HomeScreen(NetworkManager* inNet, FileManager* inFile, QString fileP
 
 	settingsbtn = new QPushButton("Settings", centralWidget);
 
-	connect(settingsbtn, &QPushButton::clicked, this, [this, filePath] {
+	connect(settingsbtn, &QPushButton::clicked, this, [this, filePath] 
+		{
 		emit goToSettings(filePath);
 		});
 
@@ -107,14 +108,9 @@ void HomeScreen::rollDice()
 			QMessageBox::Ok
 		);
 	}
-	return;
 }
 
-int HomeScreen::generateRandomNumber(int num) 
-{
-	int randomNum = QRandomGenerator::global()->bounded(1, num + 1);
-	return randomNum;
-}
+int HomeScreen::generateRandomNumber(int num) { return QRandomGenerator::global()->bounded(1, num + 1); }
 
 void HomeScreen::handleServerInput(const QJsonObject& inData)
 {

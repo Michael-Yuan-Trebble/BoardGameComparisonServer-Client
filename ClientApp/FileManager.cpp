@@ -1,14 +1,8 @@
 #include "FileManager.h"
 
-FileManager::FileManager(QObject* parent) : QObject(parent)
-{
+FileManager::FileManager(QObject* parent) : QObject(parent) {}
 
-}
-
-FileManager::~FileManager()
-{
-
-}
+FileManager::~FileManager() {}
 
 bool FileManager::saveJson(const QString& filePath, const QJsonObject& json)
 {

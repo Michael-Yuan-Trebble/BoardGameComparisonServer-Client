@@ -14,6 +14,7 @@
 #include <qmessagebox.h>
 #include <qjsonobject.h>
 #include <qjsondocument.h>
+#include <qpushbutton.h>
 #include <qrandom.h>
 #include <ctime>
 #include <random>
@@ -35,15 +36,17 @@ private slots:
 
 private:
     bool setupSocket();
-    void closeAll(SOCKET inSocket);
     void rollDice(int sides, int value, SOCKET insock);
 
     QVBoxLayout* MainLayout;
     QLabel* ServerLabel;
     QTableWidget* Table;
     QThread* serverThread;
+    QPushButton* startEndbtn;
 
     ServerWorker* worker;
+
+    bool isStarted = false;
 
 protected:
     void closeEvent(QCloseEvent* event) override;

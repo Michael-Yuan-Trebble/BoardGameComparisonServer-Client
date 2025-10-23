@@ -1,6 +1,8 @@
 #include <QtWidgets/QApplication>
 #include <qmessagebox.h>
 #include <qicon.h>
+#include <qstring.h>
+#include <qmessagebox.h>
 #include "Navigator.h"
 #include "NetworkManager.h"
 #include "FileManager.h"
@@ -28,6 +30,17 @@ int main(int argc, char *argv[])
     }
 
     NetworkManager* network = new NetworkManager();
+    QObject::connect(network, &NetworkManager::errorOccured, [](const QString &errorMessage)
+        {
+        QMessageBox::warning(
+            nullptr,
+            "Network Manager Error",
+            errorMessage,
+            QMessageBox::Ok
+        );
+        return -1;
+    });
+
     FileManager* fileManager = new FileManager();
     if (network && fileManager && network->init()) 
     {

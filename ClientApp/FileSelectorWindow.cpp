@@ -32,10 +32,7 @@ FileSelectorWindow::FileSelectorWindow(NetworkManager* inNet, FileManager* inFil
 	resize(800, 800);
 }
 
-FileSelectorWindow::~FileSelectorWindow() 
-{
-
-}
+FileSelectorWindow::~FileSelectorWindow() {}
 
 void FileSelectorWindow::createFile()
 {

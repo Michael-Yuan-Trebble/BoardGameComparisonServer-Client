@@ -4,6 +4,8 @@ ServerApp::ServerApp(QWidget *parent)
     : QMainWindow(parent)
 {
 
+    setWindowTitle("Server");
+
     QWidget* centralWidget = new QWidget(this);
     setCentralWidget(centralWidget);
 
@@ -22,16 +24,35 @@ ServerApp::ServerApp(QWidget *parent)
 
     MainLayout->addWidget(Table);
 
+    startEndbtn = new QPushButton("Start", centralWidget);
+
+    MainLayout->addWidget(startEndbtn);
+
     if (!setupSocket()) return;
 
     serverThread = new QThread(this);
     worker = new ServerWorker();
     worker->moveToThread(serverThread);
 
-    connect(serverThread, &QThread::started, worker, &ServerWorker::startServer);
     connect(worker, &ServerWorker::clientConnected, this, &ServerApp::addClient);
     connect(worker, &ServerWorker::dataRecieved, this, &ServerApp::handleInput);
     connect(worker, &ServerWorker::clientDisconnected, this, &ServerApp::removeClient);
+
+    connect(startEndbtn, &QPushButton::clicked, [this]() 
+        {
+        if (isStarted) 
+        {
+            QMetaObject::invokeMethod(worker, "stop", Qt::QueuedConnection);
+            startEndbtn->setText("Start");
+            isStarted = false;
+        }
+        else 
+        {
+            QMetaObject::invokeMethod(worker, "startServer", Qt::QueuedConnection);
+            startEndbtn->setText("End");
+            isStarted = true;
+        }
+    });
 
     serverThread->start();
 
@@ -50,10 +71,15 @@ void ServerApp::closeEvent(QCloseEvent* event)
         serverThread->deleteLater();
     }
 
+    WSACleanup();
+
     QMainWindow::closeEvent(event);
 }
 
-ServerApp::~ServerApp() {}
+ServerApp::~ServerApp() 
+{
+    if (worker) worker->stop();
+}
 
 bool ServerApp::setupSocket()
 {
@@ -119,10 +145,4 @@ void ServerApp::rollDice(int sides, int value, SOCKET inSock)
     reply["serverResult"] = value;
     QByteArray sendClient = QJsonDocument(reply).toJson(QJsonDocument::Compact);
     send(inSock, sendClient.constData(), sendClient.size(), 0);
-}
-
-void ServerApp::closeAll(SOCKET inSocket) 
-{
-    closesocket(inSocket);
-    WSACleanup();
 }
